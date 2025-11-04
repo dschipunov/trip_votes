@@ -19,11 +19,19 @@ class ActionConverter(AbstractConverter):
 class PersonConverter(AbstractConverter):
     def convert(self, value: str)-> int:
         ivalue = int(value)
-        if 1 <= ivalue <= 5:
+
+        return PersonConverter._convert(ivalue, 1, 15)
+
+    @staticmethod
+    def _convert(value: int, min: int, max: int) -> int:
+        third = round(max / 3) 
+        middle = third * 2
+
+        if min <= value <= third:
             return 1
-        elif 6 <= ivalue <= 10:
+        elif (third + 1) <= value <= (middle):
             return 2
-        elif 11 <= ivalue <= 15:
+        elif (middle + 1) <= value <= max:
             return 3
         else:
             raise ValueError(f"Person input value is out of range (1-15): {value}")

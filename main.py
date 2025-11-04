@@ -25,6 +25,9 @@ def main():
     results.add_person(data2)
     results.add_person(data3)
 
+    # Pring debug data
+    print(results)
+
     for value in results.values():
         print(f"{value.name}: {value.action}")
 

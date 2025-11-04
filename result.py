@@ -1,39 +1,38 @@
 import random
+import json
 
 from inputs import InputData
 from person import Person
+from convert import PersonConverter
 
 
 class Results:
-    all_indexes = [1,2,3]
-
     def __init__(self, act_value: int):
-        self.cache = dict()
+        self.map = dict()
         self.act_value = act_value
     
     def add_person(self, data: InputData):
-        idx = self.__get_index()
-        self.cache[idx] = Person(data.name, data.action, self.act_value)
+        idx = self.__new_index()
+        self.map[idx] = Person(data.name, data.action, self.act_value)
 
     def __str__(self):
-        return f"act_value: {self.act_value}"
+        return json.dumps(self.map, default=Person._serializer, indent=4)
 
-
-    def __get_index(self) -> int:
-        if len(self.cache) < 2:
+    def __new_index(self) -> int:
+        if len(self.map) < 2:
             return self.__next()
         else:
             keys = self.__keys()
-            for i in Results.all_indexes:
+            for i in Person.ALL_INDEXES:
                 if i not in keys:
                     return i
             return 0
-        
+
     def __keys(self) -> list[int]:
-        return [key for key in self.cache]
+        return [key for key in self.map]
     
     def values(self) -> list[Person]:
-        return [v for v in self.cache.values()]
+        return [v for v in self.map.values()]
 
     def __next(self) -> int:
         keys = self.__keys()
@@ -44,11 +43,6 @@ class Results:
         return idx
 
     def __person_value(self, min: int, max: int)-> int:
-        _third = round(max / 3)
-        sv = random.randint(min, max) 
-        if 1 <= sv <= _third:
-            return 1
-        elif (_third + 1) <= sv <= (_third * 2):
-            return 2
-        else:
-            return 3 
+        sv = random.randint(min, max)
+        return PersonConverter._convert(sv, min, max)
+    

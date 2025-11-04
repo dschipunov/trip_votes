@@ -5,6 +5,9 @@ class Action(Enum):
     STAY = 1
     GO = 2
 
+    def to_dict(self):
+        return {"name": self.name, "action": self.value}
+
 RND_ACTION_MIN = 1
 RND_ACTION_MAX = 10
 RND_ACTION_ITERATIONS = 5
